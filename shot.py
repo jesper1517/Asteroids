@@ -1,11 +1,11 @@
 import pygame
 from circleshape import CircleShape
-from constants import LINE_WIDTH
+from constants import LINE_WIDTH, SHOT_LIFETIME_SECONDS
 
 class Shot(CircleShape):
     def __init__(self, x, y, radius):
         super().__init__(x, y, radius)
-    self.lifetime = SHOT_LIFETIME_SECONDS
+        self.lifetime = SHOT_LIFETIME_SECONDS
 
     def draw(self, screen):
         pygame.draw.circle(

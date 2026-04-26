@@ -8,6 +8,13 @@ from asteroid import Asteroid
 from logger import log_event
 from shot import Shot
 
+def get_asteroid_score(radius):
+    if radius <= ASTEROID_MIN_RADIUS:
+        return SCORE_SMALL_ASTEROID
+    if radius <= ASTEROID_MIN_RADIUS * 2:
+        return SCORE_MEDIUM_ASTEROID
+    return SCORE_LARGE_ASTEROID
+
 def main():
     from logger import log_state
 
@@ -29,6 +36,7 @@ def main():
     asteroid_field = AsteroidField()
 
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+    score = 0
 
     print(f"Starting Asteroids with pygame version: {pygame.version.ver}")
     print(f"Screen width: {SCREEN_WIDTH }")
@@ -47,12 +55,17 @@ def main():
                 sys.exit()
             for shot in shots:
                 if shot.collides_with(asteroid):
+                    score += get_asteroid_score(asteroid.radius)
                     log_event("asteroid_shot")
                     shot.kill()
                     asteroid.split()
+                    break
         screen.fill(0)
         for entity in drawable:
             entity.draw(screen)
+        font = pygame.font.Font(None, 36)
+        score_text = font.render(f"score: {score}", True, "white")
+        screen.blit(score_text,(20, 20))
         pygame.display.flip()
 
         dt = clock.tick(60)/1000
